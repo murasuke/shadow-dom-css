@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>shadow DOM inherit style</title>
+  <style>
+    /* bodyに適用した場合、継承されるスタイルはshadow DOM内にも適用される */
+    body {
+      color : #d22; /* (子要素に)継承されるスタイル */
+      border: medium dashed #2d2; /* 継承されないスタイル */
+    }
+  </style>
+</head>
+<body>
+  <h1>shadow DOMの外&lt;h1&gt;</h1>
+  <div id="host"></div>
+  <script>
+    // shadow DOMを作り<h1>を追加
+    const host = document.querySelector("#host");
+    const shadow = host.attachShadow({ mode: "open" });
+    const span = document.createElement("h1");
+    span.textContent = "shadow DOMの中<h1>";
+    shadow.appendChild(span);
+  </script>
+</body>
+</html>

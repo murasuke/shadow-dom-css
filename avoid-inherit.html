@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>shadow DOM inherit style</title>
+  <style>
+    /* bodyに適用した場合、継承されるスタイルはshadow DOM内にも適用される */
+    body {
+      color : #d22; /* (子要素に)継承されるスタイル */
+      border: medium dashed #2d2; /* 継承されないスタイル */
+    }
+  </style>
+</head>
+<body>
+  <h1>shadow DOMの外&lt;h1&gt;</h1>
+  <div id="host"></div>
+  <script>
+    // shadow DOMは外部のCSSの影響を受けないはずだが、(コンテナに)継承されたプロパティーは適用される
+    const host = document.querySelector("#host");
+    const shadow = host.attachShadow({ mode: "open" });
+
+    // shadow DOM側で継承を取り消す(デフォルトへ戻す)スタイルを追加する
+    // :hostは、CSSの擬似クラスで、shadow DOM のシャドウホスト(ルート)を選択する
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(`
+      :host {
+        all: initial;
+      }
+    `);
+    shadow.adoptedStyleSheets = [sheet];
+
+    const span = document.createElement("h1");
+    span.textContent = "shadow DOMの中<h1>";
+    shadow.appendChild(span);
+  </script>
+</body>
+</html>
